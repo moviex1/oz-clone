@@ -31,13 +31,13 @@ class Book
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'books')]
-    private Collection $categories;
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'books')]
+    private Collection $tags;
 
     public function __construct()
     {
         $this->authors = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,27 +118,27 @@ class Book
     }
 
     /**
-     * @return Collection<int, Category>
+     * @return Collection<int, Tag>
      */
-    public function getCategories(): Collection
+    public function getTags(): Collection
     {
-        return $this->categories;
+        return $this->tags;
     }
 
-    public function addCategory(Category $category): static
+    public function addTag(Tag $tag): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-            $category->addBook($this);
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addBook($this);
         }
 
         return $this;
     }
 
-    public function removeCategory(Category $category): static
+    public function removeTag(Tag $tag): static
     {
-        if ($this->categories->removeElement($category)) {
-            $category->removeBook($this);
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeBook($this);
         }
 
         return $this;

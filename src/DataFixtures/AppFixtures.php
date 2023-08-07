@@ -2,10 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
+use App\Entity\Tag;
 use App\Factory\AuthorFactory;
 use App\Factory\BookFactory;
-use App\Factory\CategoryFactory;
+use App\Factory\TagFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -13,15 +13,15 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $categories = [
+        $tags = [
             'Художественная литература', 'Комиксы, манга, артбуки', 'Нехудожественная литература',
             'Детская литература', 'Бизнес-литература', 'Учебная литература', 'Инностранная литература'
         ];
 
-        foreach ($categories as $categoryName) {
-            $category = new Category();
-            $category->setName($categoryName);
-            $manager->persist($category);
+        foreach ($tags as $tagName) {
+            $tag = new Tag();
+            $tag->setName($tagName);
+            $manager->persist($tag);
         }
 
         $manager->flush();
@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
             ->many(50)
             ->create(function () {
                 return [
-                    'categories' => CategoryFactory::randomRange(1, 1),
+                    'categories' => TagFactory::randomRange(1, 1),
                     'authors' => AuthorFactory::randomRange(1, 2)
                 ];
             });

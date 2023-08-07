@@ -4,7 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Book;
 use App\Repository\BookRepository;
-use App\Repository\CategoryRepository;
+use App\Repository\TagRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
