@@ -19,7 +19,7 @@ class Book
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\ManyToMany(targetEntity: Author::class)]
+    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
     private Collection $authors;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -31,12 +31,13 @@ class Book
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $category = null;
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'books')]
+    private Collection $categories;
 
     public function __construct()
     {
         $this->authors = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,9 +57,28 @@ class Book
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getAuthors(): ?string
     {
         return $this->authors;
+    }
+
+    public function addAuthor(Author $author): static
+    {
+        if (!$this->authors->contains($author)) {
+            $this->authors->add($author);
+            $author->addBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): static
+    {
+        if ($this->authors->removeElement($author)) {
+            $author->removeBook($this);
+        }
+
+        return $this;
     }
 
     public function getReleaseDate(): ?\DateTimeInterface
@@ -97,14 +117,29 @@ class Book
         return $this;
     }
 
-    public function getCategory(): ?string
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
     {
-        return $this->category;
+        return $this->categories;
     }
 
-    public function setCategory(?string $category): static
+    public function addCategory(Category $category): static
     {
-        $this->category = $category;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeBook($this);
+        }
 
         return $this;
     }

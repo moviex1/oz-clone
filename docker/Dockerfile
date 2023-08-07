@@ -14,5 +14,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
-RUN git config --global user.email "moviex@inbox.com" \
-    && git config --global user.name "Nikita"
+RUN git config --global user.email "user@example.com" \
+    && git config --global user.name "user"
+
+CMD symfony console doctrine:migrations:migrate --no-interaction

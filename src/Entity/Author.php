@@ -94,4 +94,20 @@ class Author
     {
         return $this->books;
     }
+
+    public function addBook(Book $book): static
+    {
+        if (!$this->books->contains($book)) {
+            $this->books->add($book);
+        }
+
+        return $this;
+    }
+
+    public function removeBook(Book $book): static
+    {
+        $this->books->removeElement($book);
+
+        return $this;
+    }
 }
