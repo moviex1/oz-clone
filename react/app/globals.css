@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --accent-color: #fff;
+    --accent-color: rgb(255, 151, 29);
 }
 
 /*@media (prefers-color-scheme: dark) {*/
@@ -16,4 +16,63 @@
 
 * {
     box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    outline: none;
+}
+
+.centerY {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.centerX {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.activeItem {
+    background-color: #fff;
+    color: var(--accent-color);
+    position: relative;
+}
+
+.activeItem::before {
+    content: "";
+    width: 4px;
+    height: 100%;
+    position: absolute;
+    background-color: var(--accent-color);
+    left: 0;
+    top: 0;
+}
+
+.sticky {
+    position: sticky;
+}
+
+.btn {
+    background-color: rgba(255, 151, 29, 0.1);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+.slick-arrow.slick-prev:before,
+.slick-arrow.slick-next:before {
+    color: black;
+}
+
+.slick-slider {
+    padding-left: 100px;
 }
