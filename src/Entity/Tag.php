@@ -43,13 +43,6 @@ class Tag
         return $this;
     }
 
-    /**
-     * @return Collection<int, Book>
-     */
-    public function getBooks(): Collection
-    {
-        return $this->books;
-    }
 
     public function addBook(Book $book): static
     {

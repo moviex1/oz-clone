@@ -49,8 +49,10 @@ final class BookFactory extends ModelFactory
     {
         return [
             'pages' => rand(120, 3000),
+            'description' => self::faker()->text(),
             'release_date' => self::faker()->dateTimeBetween('-50 years'),
             'title' => self::faker()->sentence(rand(1,3)),
+            'price' => self::faker()->randomFloat(2, 1, 80)
         ];
     }
 

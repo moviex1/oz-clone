@@ -9,13 +9,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BookController extends AbstractController
 {
-    #[Route('/book', name: 'app_book')]
-    public function index(BookRepository $bookRepository): JsonResponse
+    #[Route('/api/v1/book/{page}', name: 'app_book', defaults: ['page' => 0])]
+    public function index(BookRepository $bookRepository, int $page): JsonResponse
     {
-
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/BookController.php',
-        ]);
+        $books = $bookRepository->getAllBooks($page);
+        return $this->json($books);
     }
 }

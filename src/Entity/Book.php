@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -34,6 +35,9 @@ class Book
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'books')]
     private Collection $tags;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $price = null;
+
     public function __construct()
     {
         $this->authors = new ArrayCollection();
@@ -57,7 +61,7 @@ class Book
         return $this;
     }
 
-    public function getAuthors(): ?string
+    public function getAuthors(): Collection
     {
         return $this->authors;
     }
@@ -140,6 +144,18 @@ class Book
         if ($this->tags->removeElement($tag)) {
             $tag->removeBook($this);
         }
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(string $price): static
+    {
+        $this->price = $price;
 
         return $this;
     }

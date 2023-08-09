@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
             ->many(50)
             ->create(function () {
                 return [
-                    'categories' => TagFactory::randomRange(1, 1),
+                    'tags' => TagFactory::randomRange(1, 3),
                     'authors' => AuthorFactory::randomRange(1, 2)
                 ];
             });
