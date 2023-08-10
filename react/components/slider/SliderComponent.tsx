@@ -1,6 +1,6 @@
 "use client"
 import BookPoster from "@/assets/bookPoster.png"
-import ShopMiniItem from "@/components/store/ShopMiniItem"
+import ShopMiniItem from "@/components/common/ShopMiniItem"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"

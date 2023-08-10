@@ -24,7 +24,7 @@ const Header = () => {
             </Link>
             <Navbar>
                 <Link
-                    href={"/login"}
+                    href={"/signin"}
                     className={
                         "px-[58px] py-3.5 bg-neutral-100 text-black text-xl rounded-[30px]"
                     }
