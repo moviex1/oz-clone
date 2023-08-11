@@ -17,8 +17,7 @@ class BookController extends AbstractController
         $page = max(1, $request->query->get('page', 1));
         $limit = max(1, $request->query->get('limit', 10));
 
-
-        $books = $bookRepository->getAllBooks($page, $limit);
+        $books = $bookRepository->findBooks($page, $limit);
 
         return $this->json($books);
     }

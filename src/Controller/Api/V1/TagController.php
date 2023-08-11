@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api\V1;
 
+use App\Repository\TagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,11 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TagController extends AbstractController
 {
     #[Route('/tag', name: 'app_tag')]
-    public function index(): JsonResponse
+    public function index(TagRepository $tagRepository): JsonResponse
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/TagController.php',
-        ]);
+        $tags = $tagRepository->findAll();
+        return $this->json($tags);
     }
 }

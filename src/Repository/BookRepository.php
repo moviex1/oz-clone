@@ -21,7 +21,7 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
-    public function getAllBooks(int $page, int $limit): array
+    public function findBooks(int $page, int $limit): array
     {
         $offset = ($page - 1) * $limit;
 

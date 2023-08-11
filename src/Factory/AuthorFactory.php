@@ -47,6 +47,7 @@ final class AuthorFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
+            'pfp_url' => self::faker()->imageUrl(),
             'birth_date' => self::faker()->dateTimeBetween('-80 years', '-30 years'),
             'first_name' => self::faker()->firstName(),
             'last_name' => self::faker()->lastName(),

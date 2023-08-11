@@ -40,6 +40,12 @@ class Book
     #[ORM\ManyToMany(targetEntity: Tag::class)]
     private Collection $tags;
 
+    #[ORM\JoinTable(name: 'books_photos')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'photo_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Photo::class)]
+    private Collection $photos;
+
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
@@ -47,6 +53,7 @@ class Book
     {
         $this->authors = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +150,27 @@ class Book
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): static
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): static
+    {
+        $this->photos->removeElement($photo);
 
         return $this;
     }

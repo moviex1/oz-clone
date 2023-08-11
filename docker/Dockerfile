@@ -17,4 +17,7 @@ RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 RUN git config --global user.email "user@example.com" \
     && git config --global user.name "user"
 
-CMD symfony console doctrine:migrations:migrate --no-interaction
+CMD composer update && \
+    php bin/console doctrine:migrations:migrate --no-interaction && \
+    php bin/console cache:clear && \
+    php-fpm
