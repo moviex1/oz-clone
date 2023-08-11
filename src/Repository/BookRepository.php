@@ -21,21 +21,24 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
-    public function getAllBooks(int $page): array
+    public function getAllBooks(int $page, int $limit): array
     {
+        $offset = ($page - 1) * $limit;
+
         return $this->createQueryBuilder('b')
             ->select('b')
-            ->setFirstResult($page * 20)
-            ->setMaxResults(20)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
 
-    public function findBooksByCategoryId(int $categoryId)
+    public function findBooksByCategoryId(int $tagId)
     {
         return $this->createQueryBuilder('b')
-            ->innerJoin('b.categories', 'c')
-            ->andWhere('c.id = '.$categoryId)
+            ->innerJoin('b.tags', 't')
+            ->andWhere('t.id = :tagId')
+            ->setParameter('tagId', $tagId)
             ->getQuery()
             ->getResult();
     }

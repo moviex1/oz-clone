@@ -28,15 +28,6 @@ class Author
     #[ORM\Column(length: 300, nullable: true)]
     private ?string $pfp_url = null;
 
-    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'authors')]
-    #[ORM\JoinTable('authors_books')]
-    private Collection $books;
-
-    public function __construct()
-    {
-        $this->books = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -86,22 +77,6 @@ class Author
     public function setPfpUrl(?string $pfp_url): static
     {
         $this->pfp_url = $pfp_url;
-
-        return $this;
-    }
-
-    public function addBook(Book $book): static
-    {
-        if (!$this->books->contains($book)) {
-            $this->books->add($book);
-        }
-
-        return $this;
-    }
-
-    public function removeBook(Book $book): static
-    {
-        $this->books->removeElement($book);
 
         return $this;
     }

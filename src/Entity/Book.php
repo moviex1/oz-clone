@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -20,9 +19,6 @@ class Book
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
-    private Collection $authors;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $release_date = null;
 
@@ -32,7 +28,16 @@ class Book
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'books')]
+    #[ORM\JoinTable(name: 'books_authors')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'author_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Author::class)]
+    private Collection $authors;
+
+    #[ORM\JoinTable(name: 'books_tags')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Tag::class)]
     private Collection $tags;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
@@ -70,7 +75,6 @@ class Book
     {
         if (!$this->authors->contains($author)) {
             $this->authors->add($author);
-            $author->addBook($this);
         }
 
         return $this;
@@ -78,9 +82,7 @@ class Book
 
     public function removeAuthor(Author $author): static
     {
-        if ($this->authors->removeElement($author)) {
-            $author->removeBook($this);
-        }
+        $this->authors->removeElement($author);
 
         return $this;
     }
@@ -133,7 +135,6 @@ class Book
     {
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
-            $tag->addBook($this);
         }
 
         return $this;
@@ -141,9 +142,7 @@ class Book
 
     public function removeTag(Tag $tag): static
     {
-        if ($this->tags->removeElement($tag)) {
-            $tag->removeBook($this);
-        }
+        $this->tags->removeElement($tag);
 
         return $this;
     }
