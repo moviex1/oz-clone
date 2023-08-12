@@ -6,6 +6,7 @@ use App\Repository\BookRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/book')]
@@ -26,6 +27,21 @@ class BookController extends AbstractController
     public function getBookByCategory(int $categoryId, BookRepository $bookRepository): JsonResponse
     {
         $books = $bookRepository->findBooksByCategoryId($categoryId);
+
+        return $this->json($books);
+    }
+
+    #[Route('/title')]
+    public function getBooksByTitle(BookRepository $bookRepository, Request $request)
+    {
+        $title = $request->query->get('title');
+
+        if (!$title) {
+            return $this->json([
+                'message' => 'You should pass title as query parameter'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $books = $bookRepository->findBooksByTitle($title);
 
         return $this->json($books);
     }

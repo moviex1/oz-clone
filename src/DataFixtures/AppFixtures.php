@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Tag;
 use App\Factory\AuthorFactory;
 use App\Factory\BookFactory;
+use App\Factory\PhotoFactory;
 use App\Factory\TagFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -33,7 +34,8 @@ class AppFixtures extends Fixture
             ->create(function () {
                 return [
                     'tags' => TagFactory::randomRange(1, 3),
-                    'authors' => AuthorFactory::randomRange(1, 2)
+                    'authors' => AuthorFactory::randomRange(1, 2),
+                    'photos' => PhotoFactory::new()->many(2,5)
                 ];
             });
     }
