@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api\V1;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Response\UserResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class UserController extends AbstractController
 {
@@ -22,7 +24,7 @@ class UserController extends AbstractController
     {
         $content = json_decode($request->getContent());
         $error = $this->validateRequest($content);
-        if($error){
+        if ($error) {
             return $this->json([
                 'message' => $error
             ], Response::HTTP_BAD_REQUEST);
@@ -35,6 +37,18 @@ class UserController extends AbstractController
         );
         return $this->json(new UserResponse($user));
     }
+
+    #[Route('/login', name: 'login')]
+    public function login(#[CurrentUser] ?User $user)
+    {
+        if ($user === null) {
+           return $this->json([
+               'message' => 'Invalid credentials'
+           ], Response::HTTP_BAD_REQUEST);
+        }
+        return $this->json(new UserResponse($user));
+    }
+
 
     private function validateRequest(object $content): string|false
     {
