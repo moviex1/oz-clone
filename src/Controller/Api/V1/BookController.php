@@ -23,8 +23,14 @@ class BookController extends AbstractController
         return $this->json($books);
     }
 
+    #[Route('/{id}')]
+    public function getBookById(int $id, BookRepository $bookRepository)
+    {
+        return $this->json($bookRepository->find($id));
+    }
+
     #[Route('/category/{categoryId}')]
-    public function getBookByCategory(int $categoryId, BookRepository $bookRepository): JsonResponse
+    public function getBookByCategoryId(int $categoryId, BookRepository $bookRepository): JsonResponse
     {
         $books = $bookRepository->findBooksByCategoryId($categoryId);
 
@@ -32,7 +38,7 @@ class BookController extends AbstractController
     }
 
     #[Route('/title')]
-    public function getBooksByTitle(BookRepository $bookRepository, Request $request)
+    public function getBooksByTitle(BookRepository $bookRepository, Request $request): JsonResponse
     {
         $title = $request->query->get('title');
 
@@ -42,6 +48,14 @@ class BookController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
         $books = $bookRepository->findBooksByTitle($title);
+
+        return $this->json($books);
+    }
+
+    #[Route('/author/{authorId}')]
+    public function getBooksByAuthorId(int $authorId, BookRepository $bookRepository): JsonResponse
+    {
+        $books = $bookRepository->findBooksByAuthorId($authorId);
 
         return $this->json($books);
     }

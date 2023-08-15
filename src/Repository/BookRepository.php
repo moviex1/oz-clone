@@ -52,6 +52,16 @@ class BookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findBooksByAuthorId(int $authorId)
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.authors', 'a')
+            ->andWhere('a.id = :authorId')
+            ->setParameter('authorId', $authorId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */
