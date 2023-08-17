@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\AuthorRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,15 +25,6 @@ class Author
 
     #[ORM\Column(length: 300, nullable: true)]
     private ?string $pfp_url = null;
-
-    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'authors')]
-    #[ORM\JoinTable('authors_books')]
-    private Collection $books;
-
-    public function __construct()
-    {
-        $this->books = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -88,10 +77,5 @@ class Author
         $this->pfp_url = $pfp_url;
 
         return $this;
-    }
-
-    public function getBooks(): Collection
-    {
-        return $this->books;
     }
 }

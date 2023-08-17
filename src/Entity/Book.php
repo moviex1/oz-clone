@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
+#[ORM\Index(columns: ['title'], name: 'search_idx')]
 class Book
 {
     #[ORM\Id]
@@ -19,9 +20,6 @@ class Book
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\ManyToMany(targetEntity: Author::class)]
-    private Collection $authors;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $release_date = null;
 
@@ -31,12 +29,33 @@ class Book
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $category = null;
+    #[ORM\JoinTable(name: 'books_authors')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'author_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Author::class)]
+    private Collection $authors;
+
+    #[ORM\JoinTable(name: 'books_tags')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Tag::class)]
+    private Collection $tags;
+
+    #[ORM\JoinTable(name: 'books_photos')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'photo_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Photo::class)]
+    private Collection $photos;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $price = null;
 
     public function __construct()
     {
         $this->authors = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->photos = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,9 +75,25 @@ class Book
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getAuthors(): Collection
     {
         return $this->authors;
+    }
+
+    public function addAuthor(Author $author): static
+    {
+        if (!$this->authors->contains($author)) {
+            $this->authors->add($author);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): static
+    {
+        $this->authors->removeElement($author);
+
+        return $this;
     }
 
     public function getReleaseDate(): ?\DateTimeInterface
@@ -97,15 +132,82 @@ class Book
         return $this;
     }
 
-    public function getCategory(): ?string
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
     {
-        return $this->category;
+        return $this->tags;
     }
 
-    public function setCategory(?string $category): static
+    public function addTag(Tag $tag): static
     {
-        $this->category = $category;
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
 
         return $this;
     }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): static
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): static
+    {
+        $this->photos->removeElement($photo);
+
+        return $this;
+    }
+
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        $this->reviews->removeElement($review);
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(string $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
 }

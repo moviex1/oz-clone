@@ -21,6 +21,47 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
+    public function findBooks(int $page, int $limit): array
+    {
+        $offset = ($page - 1) * $limit;
+
+        return $this->createQueryBuilder('b')
+            ->select('b')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBooksByCategoryId(int $tagId)
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.tags', 't')
+            ->andWhere('t.id = :tagId')
+            ->setParameter('tagId', $tagId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBooksByTitle(string $title)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.title LIKE :title')
+            ->setParameter('title', "$title%")
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBooksByAuthorId(int $authorId)
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.authors', 'a')
+            ->andWhere('a.id = :authorId')
+            ->setParameter('authorId', $authorId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */

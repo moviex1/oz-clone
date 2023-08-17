@@ -1,0 +1,308 @@
+swagger: '2.0'
+info:
+  description: This is a simple API
+  version: 1.0.0
+  title: Simple Inventory API
+  contact:
+    email: you@your-company.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+tags:
+  - name: Author
+    description: Author endpoints
+  - name: Book
+    description: Book endpoints
+  - name: Tag
+    description: Tag endpoints
+  - name: Auth
+    description: Auth endpoints
+paths:
+  /book:
+    get:
+      tags:
+        - Book
+      summary: Returns all books
+      parameters:
+        - in: query
+          name: page
+          required: false
+          type: integer
+          minimum: 1
+          description: Parameter description in Markdown.
+        - in: query
+          name: limit
+          required: false
+          type: integer
+          minimum: 1
+          description: Parameter description in Markdown.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+  /book/{id}:
+    get:
+      tags:
+        - Book
+      summary: Returns single book by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          minimum: 1
+          description: Id of the book
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Book'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /book/category/{categoryId}:
+    get:
+      tags:
+        - Book
+      summary: Getting books by category id
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          type: integer
+          minimum: 1
+          description: id of category
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /book/author/{authorId}:
+    get:
+      tags:
+        - Book
+      summary: Getting books by author's id
+      parameters:
+        - in: path
+          name: authorId
+          type: integer
+          required: true
+          minimum: 1
+          description: Author's id
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /author:
+    get:
+      tags:
+        - Author
+      summary: Returns list of all authors
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Author'
+  /author/{id}:
+    get:
+      tags:
+        - Author
+      summary: Returns a single author by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          minimum: 1
+          description: Id of the author
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Author'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /tag:
+    get:
+      tags:
+        - Tag
+      summary: Returns list of tags
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: When user successfully enters its credentials they get cookies, which will be provided in each request
+      parameters:
+        - in: body
+          name: Auth body
+          required: true
+          schema:
+            $ref: '#/definitions/Credentials'
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: 'example@mail.com'
+              roles:
+                type: array
+                items:
+                  type: string
+                  example: USER_ROLE
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+
+definitions:
+  ErrorResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        description: description of the error
+        example: Cannot find book
+  Author:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Author id
+        example: 1
+      firstName:
+        type: string
+        description: Author's first name
+        example: Chuck
+      lastName:
+        type: string
+        description: Author's last name
+        example: Palahniuk
+      birthDate:
+        type: string
+        description: Authors's birthdate
+        example: 1961-08-12T00:37:19+00:00
+      pfpUrl:
+        type: string
+        description: Author's profile picture url
+        example: https://via.placeholder.com/640x480.png/00ccff?text=sint
+  Tag:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Tag id
+        example: 23
+      name:
+        type: string
+        description: Name of the tag
+        example: Бестселлер
+  Photo:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Photo id
+        example: 25
+      url:
+        type: string
+        description: Photo url
+        example: https://via.placeholder.com/640x480.png/00aa11?text=nihil
+  Book:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: The book id.
+        example: 1
+      title:
+        type: string
+        description: Book title.
+        example: Fight club
+      authors:
+        type: array
+        items:
+          $ref: '#/definitions/Author'
+      releaseDate:
+        type: string
+        description: Date when book was published.
+        example: 2009-04-12T01:36:05+00:00
+      pages:
+        type: integer
+        description: The count book's pages
+        example: 224
+      description:
+        type: string
+        description: Description of the book
+        example: In his debut novel, Chuck Palahniuk showed himself to be his generation's most visionary satirist. Fight Club's estranged narrator leaves his lackluster job when he comes under the thrall of Tyler Durden, an enigmatic young man who holds secret boxing matches in the basement of bars.
+      tags:
+        type: array
+        items:
+          $ref: '#/definitions/Tag'
+      photos:
+        type: array
+        items:
+          $ref: '#/definitions/Photo'
+      price:
+        type: string
+        description: Books price
+        example: 8.95
+  Credentials:
+    type: object
+    properties:
+      email:
+        type: string
+        description: Users email
+        example: example@mail.com
+      password:
+        type: string
+        description: Users password
+        example: password1234
+
+host: localhost:8081
+basePath: /api/v1
+schemes:
+  - http
