@@ -1,6 +1,5 @@
 import { BsBookmarkDash } from "react-icons/bs"
-import NavItem from "@/components/nav/NavItem"
-import StoreItem from "@/components/common/ShopItem"
+import ShopItem from "@/components/common/ShopItem"
 import React from "react"
 import StoreMiniItem from "@/components/common/ShopMiniItem"
 import BookPoster from "@/assets/bookPoster.png"
@@ -10,63 +9,60 @@ import Section from "@/components/main/Section"
 import SubSection from "@/components/main/SubSection"
 import StartWindow from "@/components/main/StartWindow"
 import SliderComponent from "@/components/slider/SliderComponent"
+import Navbar from "@/components/nav/Navbar"
 
 export default function Home() {
     return (
         <>
             <StartWindow />
             <section className="bg-[#F5F6F8] flex relative gap-16 py-20">
-                <nav className="w-[15%] h-full sticky top-8 flex flex-col gap-3 ">
-                    <h2 className={"font-semibold text-xl pl-24 py-2"}>
-                        Book by Genre
-                    </h2>
-                    <NavItem title={"All Genres"} isActive={true} />
-                    <NavItem title={"Science"} />
-                    <NavItem title={"Fantasy"} />
-                    <NavItem title={"Business"} />
-                    <NavItem title={"Philosophy"} />
-                    <NavItem title={"Biography"} />
-                </nav>
+                <Navbar />
                 <div className={"flex flex-col gap-20 w-[85%]"}>
                     <Section>
                         <SubSection title={"Recommended"}>
                             <div className={"flex flex-wrap gap-20 py-16"}>
-                                <StoreItem
+                                <ShopItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
                                     author="anthony doerr"
                                     votes={1988288}
                                 />
-                                <StoreItem
+                                <ShopItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
                                     author="anthony doerr"
                                     votes={1988288}
                                 />
-                                <StoreItem
+                                <ShopItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
                                     author="anthony doerr"
                                     votes={1988288}
                                 />
-                                <StoreItem
+                                <ShopItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
                                     author="anthony doerr"
                                     votes={1988288}
                                 />
-                                <StoreItem
+                                <ShopItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
                                     author="anthony doerr"
                                     votes={1988288}
                                 />
-                                <StoreItem
+                                <ShopItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
@@ -78,24 +74,28 @@ export default function Home() {
                         <SubSection title={"New Arrivals"}>
                             <div className="flex flex-wrap gap-20 justify-between py-16">
                                 <StoreMiniItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     author="anthony doerr"
                                     width={"20%"}
                                 />
                                 <StoreMiniItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     author="anthony doerr"
                                     width={"20%"}
                                 />
                                 <StoreMiniItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     width={"20%"}
                                     author="anthony doerr"
                                 />
                                 <StoreMiniItem
+                                    id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     width={"20%"}
@@ -108,9 +108,11 @@ export default function Home() {
                         <SubSection title={"Book of this week"}>
                             <div className="flex py-20 gap-16 items-center">
                                 <div className={"flex flex-col gap-6 w-2/6"}>
-                                    <h1 className="text-6xl opacity-80">
-                                        Salvation of a Saint
-                                    </h1>
+                                    <Link href={`/1`}>
+                                        <h1 className="text-6xl opacity-80">
+                                            Salvation of a Saint
+                                        </h1>
+                                    </Link>
                                     <span className={"opacity-90"}>
                                         Keigo Higashiro
                                     </span>
@@ -154,7 +156,7 @@ export default function Home() {
                                             <BsBookmarkDash />
                                         </button>
                                         <Link
-                                            href={`/id`}
+                                            href={`/1`}
                                             className={
                                                 "btn py-4 px-12 rounded-lg"
                                             }

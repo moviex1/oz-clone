@@ -19,8 +19,8 @@ export default function RootLayout({
     return (
         <html lang="en" className={"rubik.className"}>
             <body className={"bg-[#F5F6F8]"}>
-                <header className={"absolute top-0 left-0"}>
-                    <BackBtn />
+                <header className={"absolute top-0 left-0 z-10"}>
+                    <BackBtn className="p-4 text-black text-3xl" />
                 </header>
                 <main className="w-full h-full flex justify-center items-center">
                     {children}

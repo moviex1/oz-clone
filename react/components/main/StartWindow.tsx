@@ -1,9 +1,11 @@
+"use client"
 import React from "react"
 import Searchbar from "@/components/main/SearchBar"
 
 const StartWindow = () => {
+    const vh = window.innerHeight * 0.01
     return (
-        <section className={"w-4/5 m-auto h-[100vh]"}>
+        <section className={"w-4/5 m-auto h-[calc(100vh-110px)]"}>
             <div className={"absolute top-0 right-0 h-full -z-10"}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -20,8 +22,7 @@ const StartWindow = () => {
             </div>
             <div className={"flex flex-col gap-6 py-12 centerY"}>
                 <h1 className="text-7xl font-bold uppercase">
-                    read and add <br />
-                    your insight
+                    read and add <br /> your insight
                 </h1>
                 <span className="text-black text-2xl capitalize">
                     find your favorite book

@@ -78,7 +78,7 @@ const SignIn = () => {
                 )}
                 <div>
                     <Link
-                        href={"/forgot-pass"}
+                        href={"/signin/forgot-pass"}
                         className={"float-right text-blue-500"}
                     >
                         Forgot password?

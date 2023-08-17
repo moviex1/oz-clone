@@ -3,13 +3,17 @@ import { useRouter } from "next/navigation"
 import { BiArrowBack } from "react-icons/bi"
 import React from "react"
 
-const BackBtn = () => {
+type Props = {
+    className?: string
+}
+
+const BackBtn = ({ className }: Props) => {
     const router = useRouter()
 
     return (
         <div
             onClick={() => router.back()}
-            className={"p-4 text-2xl cursor-pointer"}
+            className={"cursor-pointer" + " " + className}
         >
             <BiArrowBack />
         </div>

@@ -1,6 +1,9 @@
 import Image from "next/image"
 import { AiFillStar } from "react-icons/ai"
 import BookPoster from "@/assets/bookPoster.png"
+import React from "react"
+import Link from "next/link"
+import CustomImage from "@/components/common/CustomImage"
 
 type StoreMiniItemProps = {
     title: string
@@ -8,6 +11,7 @@ type StoreMiniItemProps = {
     src: string
     alt?: string
     width?: string
+    id: number
 }
 
 const StoreMiniItem = ({
@@ -16,10 +20,15 @@ const StoreMiniItem = ({
     src,
     alt,
     width = "100%",
+    id,
 }: StoreMiniItemProps) => {
     return (
-        <div className={"flex flex-col gap-4"} style={{ width: width }}>
-            <Image src={BookPoster} alt={"poster"} width={200} />
+        <Link
+            href={`/${id}`}
+            className={"flex flex-col gap-4"}
+            style={{ width: width }}
+        >
+            <CustomImage src={BookPoster.src} alt={"poster"} width={200} />
             <div className={"flex flex-col gap-4"}>
                 <h2 className={"capitalize w-[90%] font-medium text-2xl"}>
                     {title}
@@ -35,7 +44,7 @@ const StoreMiniItem = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

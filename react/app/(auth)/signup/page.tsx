@@ -14,7 +14,7 @@ type FormValues = {
     cpassword: string
 }
 
-const SignUp = () => {
+export default function SignUp() {
     const {
         register,
         handleSubmit,
@@ -111,5 +111,3 @@ const SignUp = () => {
         </div>
     )
 }
-
-export default SignUp
