@@ -55,6 +55,7 @@ class Book
         $this->authors = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +177,27 @@ class Book
         return $this;
     }
 
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        $this->reviews->removeElement($review);
+
+        return $this;
+    }
+
     public function getPrice(): ?string
     {
         return $this->price;
@@ -187,4 +209,5 @@ class Book
 
         return $this;
     }
+
 }
