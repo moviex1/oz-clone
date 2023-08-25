@@ -6,7 +6,9 @@ use App\Entity\Tag;
 use App\Factory\AuthorFactory;
 use App\Factory\BookFactory;
 use App\Factory\PhotoFactory;
+use App\Factory\ReviewFactory;
 use App\Factory\TagFactory;
+use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -28,6 +30,7 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         AuthorFactory::createMany(10);
+        UserFactory::createMany(4);
 
         BookFactory::new()
             ->many(50)
@@ -37,6 +40,15 @@ class AppFixtures extends Fixture
                     'authors' => AuthorFactory::randomRange(1, 2),
                     'photos' => PhotoFactory::new()->many(2,5)
                 ];
+            });
+
+        ReviewFactory::new()
+            ->many(40)
+            ->create(function () {
+               return [
+                   'user' => UserFactory::random(),
+                   'book' => BookFactory::random()
+               ];
             });
     }
 }

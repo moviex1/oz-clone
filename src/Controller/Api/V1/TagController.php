@@ -10,9 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class TagController extends AbstractController
 {
     #[Route('/tag', name: 'app_tag')]
-    public function index(TagRepository $tagRepository): JsonResponse
+    public function index(?string $tagRepository): JsonResponse
     {
-        $tags = $tagRepository->findAll();
+//        $tags = $tagRepository->findAll();
+        dd($tagRepository);
         return $this->json($tags);
     }
 }
