@@ -10,8 +10,9 @@ type StoreMiniItemProps = {
     author: string
     src: string
     alt?: string
-    width?: string
     id: number
+    children?: React.ReactNode
+    className?: string
 }
 
 const StoreMiniItem = ({
@@ -19,14 +20,14 @@ const StoreMiniItem = ({
     author,
     src,
     alt,
-    width = "100%",
     id,
+    children,
+    className,
 }: StoreMiniItemProps) => {
     return (
         <Link
             href={`/${id}`}
-            className={"flex flex-col gap-4"}
-            style={{ width: width }}
+            className={"flex flex-col gap-4" + " " + className}
         >
             <CustomImage src={BookPoster.src} alt={"poster"} width={200} />
             <div className={"flex flex-col gap-4"}>
@@ -43,6 +44,7 @@ const StoreMiniItem = ({
                         <AiFillStar className={"text-[#dedede]"} />
                     </div>
                 </div>
+                {children}
             </div>
         </Link>
     )

@@ -2,6 +2,7 @@ import "../globals.css"
 import type { Metadata } from "next"
 import { Rubik } from "next/font/google"
 import React from "react"
+import { Providers } from "@/redux/providers"
 
 const rubik = Rubik({ subsets: ["latin"] })
 
@@ -19,7 +20,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={rubik.className}>
                 <main className="pb-12 w-full bg-[linear-gradient(to_bottom,#FF971D_60vh,#F5F6F899_60vh)]">
-                    {children}
+                    <Providers>{children}</Providers>
                 </main>
             </body>
         </html>

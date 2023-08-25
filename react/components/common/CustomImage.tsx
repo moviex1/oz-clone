@@ -21,14 +21,16 @@ const CustomImage = ({
     const defaultImg = NoPoster.src
 
     return (
-        <Image
-            src={src ? src : defaultImg}
-            alt={alt}
-            width={width}
-            height={328}
-            priority={priority}
-            className={className}
-        />
+        <div className="shrink-0">
+            <Image
+                src={src ? src : defaultImg}
+                alt={alt}
+                width={width}
+                height={328}
+                priority={priority}
+                className={className}
+            />
+        </div>
     )
 }
 

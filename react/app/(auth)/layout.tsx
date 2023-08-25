@@ -3,6 +3,7 @@ import { Metadata } from "next"
 import React from "react"
 import { Rubik } from "next/font/google"
 import BackBtn from "@/components/auth/BackBtn"
+import { Providers } from "@/redux/providers"
 
 const rubik = Rubik({ subsets: ["latin"] })
 
@@ -23,7 +24,7 @@ export default function RootLayout({
                     <BackBtn className="p-4 text-black text-3xl" />
                 </header>
                 <main className="w-full h-full flex justify-center items-center">
-                    {children}
+                    <Providers>{children}</Providers>
                 </main>
             </body>
         </html>

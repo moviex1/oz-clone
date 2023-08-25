@@ -1,7 +1,7 @@
 import React from "react"
 
 type Props = {
-    votes: number
+    votes: number | null
     className?: string
 }
 
@@ -12,9 +12,13 @@ const Votes = ({ votes, className }: Props) => {
     )
 
     return (
-        <span className={className}>
-            {formattedNumber} {votes === 1 ? "vote" : "votes"}
-        </span>
+        <>
+            {votes && (
+                <span className={className}>
+                    {formattedNumber} {votes === 1 ? "vote" : "votes"}
+                </span>
+            )}
+        </>
     )
 }
 

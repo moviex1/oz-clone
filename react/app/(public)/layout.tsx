@@ -4,6 +4,7 @@ import { Rubik } from "next/font/google"
 import React from "react"
 import Header from "@/components/header/Header"
 import Footer from "@/components/footer/Footer"
+import { Providers } from "@/redux/providers"
 
 const rubik = Rubik({ subsets: ["latin"] })
 
@@ -21,7 +22,9 @@ export default function RootLayout({
         <html lang="en">
             <body className={rubik.className}>
                 <Header />
-                <main>{children}</main>
+                <main>
+                    <Providers>{children}</Providers>
+                </main>
                 <Footer />
             </body>
         </html>

@@ -3,7 +3,6 @@ import React from "react"
 import Searchbar from "@/components/main/SearchBar"
 
 const StartWindow = () => {
-    const vh = window.innerHeight * 0.01
     return (
         <section className={"w-4/5 m-auto h-[calc(100vh-110px)]"}>
             <div className={"absolute top-0 right-0 h-full -z-10"}>

@@ -78,27 +78,27 @@ export default function Home() {
                                     src={""}
                                     title="all the light we cannot see"
                                     author="anthony doerr"
-                                    width={"20%"}
+                                    className={"w-1/5"}
                                 />
                                 <StoreMiniItem
                                     id={1}
                                     src={""}
                                     title="all the light we cannot see"
                                     author="anthony doerr"
-                                    width={"20%"}
+                                    className={"w-1/5"}
                                 />
                                 <StoreMiniItem
                                     id={1}
                                     src={""}
                                     title="all the light we cannot see"
-                                    width={"20%"}
+                                    className={"w-1/5"}
                                     author="anthony doerr"
                                 />
                                 <StoreMiniItem
                                     id={1}
                                     src={""}
                                     title="all the light we cannot see"
-                                    width={"20%"}
+                                    className={"w-1/5"}
                                     author="anthony doerr"
                                 />
                             </div>
