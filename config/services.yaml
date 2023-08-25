@@ -19,6 +19,9 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    sensio_framework_extra_bundle.converter.request_body:
+        class: App\Converter\RequestBodyParamConverter
+        tags:
+          - { name: request.param_converter, converter: request_body }

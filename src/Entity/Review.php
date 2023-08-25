@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 class Review
@@ -27,7 +28,7 @@ class Review
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: Book::class, inversedBy: 'reviews')]
     #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id')]
     private ?Book $book = null;
 
