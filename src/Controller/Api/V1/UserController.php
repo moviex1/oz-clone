@@ -5,6 +5,7 @@ namespace App\Controller\Api\V1;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Response\UserResponse;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends AbstractController
 {
@@ -19,21 +21,21 @@ class UserController extends AbstractController
     public function index(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        ValidatorInterface $validator,
+        SerializerInterface $serializer
     ): JsonResponse
     {
-        $content = json_decode($request->getContent());
-        $error = $this->validateRequest($content);
-        if ($error) {
-            return $this->json([
-                'message' => $error
-            ], Response::HTTP_BAD_REQUEST);
+        $user = $serializer->deserialize($request->getContent(), User::class, 'json');
+        $errors = $validator->validate($user);
+        if (count($errors) > 0) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
         $user = $userRepository->createUser(
             passwordHasher: $passwordHasher,
-            email: $content->email,
-            password: $content->password,
+            email: $user->getEmail(),
+            password: $user->getPassword(),
         );
         return $this->json(new UserResponse($user));
     }
@@ -47,23 +49,5 @@ class UserController extends AbstractController
            ], Response::HTTP_BAD_REQUEST);
         }
         return $this->json(new UserResponse($user));
-    }
-
-
-    private function validateRequest(object $content): string|false
-    {
-        $error = [];
-        switch (true) {
-            case !property_exists($content, 'email'):
-                $error[] = 'email';
-            case !property_exists($content, 'password'):
-                $error[] = 'пароль';
-        }
-
-        if (empty($error)) {
-            return false;
-        }
-
-        return sprintf('Вы забыли ввести %s', implode(',', $error));
     }
 }

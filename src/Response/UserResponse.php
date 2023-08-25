@@ -3,10 +3,15 @@
 namespace App\Response;
 
 use App\Entity\User;
+use JMS\Serializer\Annotation\Groups;
 
 class UserResponse
 {
+
+    #[Groups(['user'])]
     readonly public string $email;
+
+    #[Groups(['admin', 'user'])]
     readonly public array $roles;
 
     public function __construct(User $user)

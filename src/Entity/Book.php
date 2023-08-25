@@ -47,6 +47,9 @@ class Book
     #[ORM\ManyToMany(targetEntity: Photo::class)]
     private Collection $photos;
 
+    #[ORM\OneToMany(mappedBy: 'book', targetEntity: Review::class)]
+    private Collection $reviews;
+
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
@@ -96,6 +99,11 @@ class Book
         return $this;
     }
 
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
     public function getReleaseDate(): ?\DateTimeInterface
     {
         return $this->release_date;
@@ -132,9 +140,6 @@ class Book
         return $this;
     }
 
-    /**
-     * @return Collection<int, Tag>
-     */
     public function getTags(): Collection
     {
         return $this->tags;
