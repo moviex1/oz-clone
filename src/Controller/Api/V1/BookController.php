@@ -2,10 +2,11 @@
 
 namespace App\Controller\Api\V1;
 
-use App\Entity\Book;
 use App\Repository\BookRepository;
-use JMS\Serializer\SerializerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\Response\BookResponse;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,14 +17,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
     #[Route('/', name: 'app_book')]
-    public function index(BookRepository $bookRepository, Request $request): JsonResponse
+    #[QueryParam(name: 'page', requirements: '\d+', default: '1')]
+    #[QueryParam(name: 'limit', requirements: '\d+', default: '10')]
+    #[View]
+    public function index(BookRepository $bookRepository, ParamFetcher $paramFetcher): array
     {
-        $page = max(1, $request->query->get('page', 1));
-        $limit = max(1, $request->query->get('limit', 10));
+        $page = $paramFetcher->get('page');
+        $limit = $paramFetcher->get('limit');
 
         $books = $bookRepository->findBooks($page, $limit);
+        $result = [];
+        foreach ($books as $book) {
+            $result[] = new BookResponse($book);
+        }
 
-        return $this->json($books);
+        return $result;
+
     }
 
     #[Route('/{id}')]

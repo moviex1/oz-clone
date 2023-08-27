@@ -24,7 +24,6 @@ class BookRepository extends ServiceEntityRepository
     public function findBooks(int $page, int $limit): array
     {
         $offset = ($page - 1) * $limit;
-
         return $this->createQueryBuilder('b')
             ->select('b')
             ->setFirstResult($offset)
