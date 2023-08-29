@@ -6,7 +6,7 @@ use App\Entity\Book;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class BookResponse
+class BookResponse extends AbstractApiResponse
 {
     public ?int $id;
     public ?string $title;

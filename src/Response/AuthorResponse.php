@@ -5,7 +5,7 @@ namespace App\Response;
 
 use App\Entity\Author;
 
-class AuthorResponse
+class AuthorResponse extends AbstractApiResponse
 {
     public ?int $id = null;
     public ?string $fullName = null;

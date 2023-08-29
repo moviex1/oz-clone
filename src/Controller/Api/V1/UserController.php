@@ -5,10 +5,11 @@ namespace App\Controller\Api\V1;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Response\UserResponse;
+use FOS\RestBundle\Controller\Annotations\View;
 use JMS\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,15 +19,16 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserController extends AbstractController
 {
     #[Route('/register', name: 'app_user', methods: ['POST'])]
+    #[View]
+    #[ParamConverter('user', converter: 'request_body')]
     public function index(
-        Request $request,
+        User $user,
         UserPasswordHasherInterface $passwordHasher,
         UserRepository $userRepository,
         ValidatorInterface $validator,
         SerializerInterface $serializer
-    ): JsonResponse
+    ): UserResponse|JsonResponse
     {
-        $user = $serializer->deserialize($request->getContent(), User::class, 'json');
         $errors = $validator->validate($user);
         if (count($errors) > 0) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
@@ -37,17 +39,20 @@ class UserController extends AbstractController
             email: $user->getEmail(),
             password: $user->getPassword(),
         );
-        return $this->json(new UserResponse($user));
+
+        return new UserResponse($user);
     }
 
     #[Route('/login', name: 'login')]
-    public function login(#[CurrentUser] ?User $user)
+    #[View]
+    public function login(#[CurrentUser] ?User $user): UserResponse|JsonResponse
     {
         if ($user === null) {
            return $this->json([
                'message' => 'Invalid credentials'
            ], Response::HTTP_BAD_REQUEST);
         }
-        return $this->json(new UserResponse($user));
+
+        return new UserResponse($user);
     }
 }
