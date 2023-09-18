@@ -2,13 +2,13 @@
 
 namespace App\Controller\Api\V1;
 
-use App\Entity\Book;
 use App\Repository\BookRepository;
-use JMS\Serializer\SerializerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\Response\BookResponse;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,50 +16,80 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
     #[Route('/', name: 'app_book')]
-    public function index(BookRepository $bookRepository, Request $request): JsonResponse
+    #[QueryParam(name: 'page', requirements: '\d+', default: '1')]
+    #[QueryParam(name: 'limit', requirements: '\d+', default: '10')]
+    #[QueryParam(name: 'sortBy', requirements: 'price|title|avg_rate|release_date', default: 'title')]
+    #[QueryParam(name: 'sortOrder', requirements: 'asc|desc', default: 'desc')]
+    #[View]
+    public function index(BookRepository $bookRepository, ParamFetcher $paramFetcher): array
     {
-        $page = max(1, $request->query->get('page', 1));
-        $limit = max(1, $request->query->get('limit', 10));
-
-        $books = $bookRepository->findBooks($page, $limit);
-
-        return $this->json($books);
+        return $bookRepository->findBooks(
+            $paramFetcher->get('page'),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('sortBy'),
+            $paramFetcher->get('sortOrder')
+        );
     }
 
-    #[Route('/{id}')]
-    public function getBookById(int $id, BookRepository $bookRepository)
+    #[Route('/{bookId}', requirements: ['bookId' => '\d+'])]
+    #[View]
+    public function getBookById(int $bookId, BookRepository $bookRepository): BookResponse|JsonResponse
     {
-        return $this->json($bookRepository->find($id));
-    }
+        $book = $bookRepository->findOneById($bookId);
+        if ($book === null) {
+            return $this->json([
+                'message' => 'Книга с таким id не найдена'
+            ], Response::HTTP_NOT_FOUND);
+        }
 
-    #[Route('/category/{categoryId}')]
-    public function getBookByCategoryId(int $categoryId, BookRepository $bookRepository): JsonResponse
-    {
-        $books = $bookRepository->findBooksByCategoryId($categoryId);
-
-        return $this->json($books);
+        return $book;
     }
 
     #[Route('/title')]
-    public function getBooksByTitle(BookRepository $bookRepository, Request $request): JsonResponse
+    #[QueryParam(name: 'title', strict: true)]
+    #[View]
+    public function getBooksByTitle(BookRepository $bookRepository, ParamFetcher $paramFetcher): array|JsonResponse
     {
-        $title = $request->query->get('title');
+        $title = $paramFetcher->get('title');
 
         if (!$title) {
             return $this->json([
                 'message' => 'You should pass title as query parameter'
             ], Response::HTTP_BAD_REQUEST);
         }
-        $books = $bookRepository->findBooksByTitle($title);
 
-        return $this->json($books);
+        $books = $bookRepository->findBooksByTitle($title);
+        $result = [];
+        foreach ($books as $book) {
+            $result[] = new BookResponse($book);
+        }
+
+        return $result;
+    }
+
+    #[Route('/tag/{tagId}')]
+    #[View]
+    public function getBookByTagId(int $tagId, BookRepository $bookRepository): array
+    {
+        $books = $bookRepository->findBooksByTagId($tagId);
+        $result = [];
+        foreach ($books as $book) {
+            $result[] = new BookResponse($book);
+        }
+
+        return $result;
     }
 
     #[Route('/author/{authorId}')]
-    public function getBooksByAuthorId(int $authorId, BookRepository $bookRepository): JsonResponse
+    #[View]
+    public function getBooksByAuthorId(int $authorId, BookRepository $bookRepository): array
     {
         $books = $bookRepository->findBooksByAuthorId($authorId);
+        $result = [];
+        foreach ($books as $book) {
+            $result[] = new BookResponse($book);
+        }
 
-        return $this->json($books);
+        return $result;
     }
 }

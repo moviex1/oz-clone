@@ -32,6 +32,7 @@ services:
       - '8081:80'
     volumes:
       - ./:/var/www/symfony_docker
+      - ./docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./docker/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php

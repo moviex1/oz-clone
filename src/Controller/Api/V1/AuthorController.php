@@ -2,7 +2,10 @@
 
 namespace App\Controller\Api\V1;
 
+use App\Entity\Author;
 use App\Repository\AuthorRepository;
+use App\Response\AuthorResponse;
+use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,16 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthorController extends AbstractController
 {
     #[Route('/', name: 'app_author')]
-    public function index(AuthorRepository $authorRepository): JsonResponse
+    #[View]
+    public function index(AuthorRepository $authorRepository): array
     {
+        $result = [];
         $authors = $authorRepository->findAll();
-
-        return $this->json($authors);
+        foreach($authors as $author) {
+            $result[] = new AuthorResponse($author);
+        }
+        return $result;
     }
 
-    public function getAuthorById(int $id, AuthorRepository $authorRepository): JsonResponse
+    #[Route('/{id}')]
+    #[View]
+    public function getAuthorById(?Author $author): AuthorResponse|JsonResponse
     {
-        $author = $authorRepository->find($id);
 
         if (!$author) {
             return $this->json([
@@ -29,6 +37,6 @@ class AuthorController extends AbstractController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($author);
+        return new AuthorResponse($author);
     }
 }
