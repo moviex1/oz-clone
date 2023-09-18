@@ -9,7 +9,7 @@ RUN apt update \
     && docker-php-ext-install zip
 
 RUN pecl install xdebug && docker-php-ext-enable xdebug
-COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 WORKDIR /var/www/symfony_docker
 
