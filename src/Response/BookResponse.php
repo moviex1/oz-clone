@@ -18,8 +18,9 @@ class BookResponse extends AbstractApiResponse
     public Collection $photos;
     public Collection $reviews;
     public ?string $price = null;
+    public ?string $avgRate = null;
 
-    public function __construct(Book $book)
+    public function __construct(Book $book, ?string $avgRate = null)
     {
         $this->id = $book->getId();
         $this->title = $book->getTitle();
@@ -34,5 +35,6 @@ class BookResponse extends AbstractApiResponse
         $this->tags = $book->getTags();
         $this->reviews = $book->getReviews();
         $this->price = $book->getPrice();
+        $this->avgRate = $avgRate;
     }
 }

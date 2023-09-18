@@ -18,7 +18,12 @@ class AuthorController extends AbstractController
     #[View]
     public function index(AuthorRepository $authorRepository): array
     {
-        return AuthorResponse::collection($authorRepository->findAll());
+        $result = [];
+        $authors = $authorRepository->findAll();
+        foreach($authors as $author) {
+            $result[] = new AuthorResponse($author);
+        }
+        return $result;
     }
 
     #[Route('/{id}')]
