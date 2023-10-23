@@ -5,7 +5,7 @@ namespace App\Response;
 use App\Entity\User;
 use JMS\Serializer\Annotation\Groups;
 
-class UserResponse
+class UserResponse extends AbstractApiResponse
 {
 
     #[Groups(['user'])]

@@ -53,6 +53,15 @@ class Book
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?string $weight = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $language = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $cover = null;
+
     public function __construct()
     {
         $this->authors = new ArrayCollection();
@@ -191,6 +200,54 @@ class Book
         $this->price = $price;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getWeight(): ?string
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param string|null $weight
+     */
+    public function setWeight(?string $weight): void
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string|null $language
+     */
+    public function setLanguage(?string $language): void
+    {
+        $this->language = $language;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    /**
+     * @param string|null $cover
+     */
+    public function setCover(?string $cover): void
+    {
+        $this->cover = $cover;
     }
 
 }

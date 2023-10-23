@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Response\BookResponse;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,21 +23,55 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
-    public function findBooks(int $page, int $limit): array
+    public function findBooks(
+        int $page,
+        int $limit,
+        string $sortBy,
+        string $sortOrder
+    ): array
     {
         $offset = ($page - 1) * $limit;
 
-        return $this->createQueryBuilder('b')
-            ->select('b')
+        $booksResults = $this->booksWithAvgRateQueryBuilder()
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->orderBy('b.' . $sortBy, $sortOrder)
+            ->groupBy('b.id')
             ->getQuery()
             ->getResult();
+
+        $result = [];
+        foreach ($booksResults as $bookResult) {
+            $book = $bookResult[0];
+            $avgRate = $bookResult['avg_rate'];
+            $result[] = new BookResponse($book, $avgRate);
+        }
+
+        return $result;
     }
 
-    public function findBooksByCategoryId(int $tagId)
+    public function findOneById(int $bookId): ?BookResponse
     {
-        return $this->createQueryBuilder('b')
+        $result = $this->booksWithAvgRateQueryBuilder()
+            ->andWhere('b.id = :bookId')
+            ->groupBy('b.id')
+            ->setParameter(':bookId', $bookId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($result === null) {
+            return null;
+        }
+
+        $book = $result[0];
+        $avgRate = $result['avg_rate'];
+
+        return new BookResponse($book, $avgRate);
+    }
+
+    public function findBooksByTagId(int $tagId)
+    {
+        return $this->booksWithAvgRateQueryBuilder()
             ->innerJoin('b.tags', 't')
             ->andWhere('t.id = :tagId')
             ->setParameter('tagId', $tagId)
@@ -45,7 +81,7 @@ class BookRepository extends ServiceEntityRepository
 
     public function findBooksByTitle(string $title)
     {
-        return $this->createQueryBuilder('b')
+        return $this->booksWithAvgRateQueryBuilder()
             ->andWhere('b.title LIKE :title')
             ->setParameter('title', "$title%")
             ->getQuery()
@@ -54,12 +90,19 @@ class BookRepository extends ServiceEntityRepository
 
     public function findBooksByAuthorId(int $authorId)
     {
-        return $this->createQueryBuilder('b')
+        return $this->booksWithAvgRateQueryBuilder()
             ->innerJoin('b.authors', 'a')
             ->andWhere('a.id = :authorId')
             ->setParameter('authorId', $authorId)
             ->getQuery()
             ->getResult();
+    }
+
+    private function booksWithAvgRateQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('b')
+            ->addSelect('b', 'avg(r.rate) as avg_rate')
+            ->leftJoin('b' . '.reviews', 'r');
     }
 
 //    /**

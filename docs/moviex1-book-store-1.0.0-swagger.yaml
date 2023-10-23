@@ -47,6 +47,27 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Book'
+  /book/title:
+    get:
+      tags:
+        - Book
+      summary: Returns all books
+      parameters:
+        - in: query
+          name: title
+          required: true
+          type: string
+          minimum: 1
+          description: Book title is value of query.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
   /book/{id}:
     get:
       tags:
@@ -70,18 +91,18 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/ErrorResponse'
-  /book/category/{categoryId}:
+  /book/tag/{tagId}:
     get:
       tags:
         - Book
-      summary: Getting books by category id
+      summary: Getting books by tag id
       parameters:
         - in: path
-          name: categoryId
+          name: tagId
           required: true
           type: integer
           minimum: 1
-          description: id of category
+          description: id of tag
       produces:
         - application/json
       responses:
@@ -290,6 +311,10 @@ definitions:
         type: string
         description: Books price
         example: 8.95
+      avgRate:
+        type: string
+        description: average rating from reviews
+        example: "4.5"
   Credentials:
     type: object
     properties:
