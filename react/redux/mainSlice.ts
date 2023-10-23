@@ -1,20 +1,20 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import type { RootState } from "@/redux/store"
+import { createSlice } from "@reduxjs/toolkit"
+import { Book } from "@/types/Book"
 
-export interface CounterState {
-    value: number
+type State = {
+    status: "idle" | "loading" | "error" | "complete"
+    books: Book[]
 }
 
-const initialState: CounterState = {
-    value: 0,
+const initialState: State = {
+    status: "idle",
+    books: [],
 }
 
-export const counterSlice = createSlice({
-    name: "counter",
+export const mainSlice = createSlice({
+    name: "main",
     initialState,
     reducers: {},
 })
 
-export const {} = counterSlice.actions
-
-export default counterSlice.reducer
+export default mainSlice.reducer

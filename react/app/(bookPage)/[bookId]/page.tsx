@@ -9,8 +9,22 @@ import Link from "next/link"
 import ShopItem from "@/components/common/ShopItem"
 import Category from "@/components/bookPage/Category"
 import AddInfo from "@/components/bookPage/AddInfo"
+import { Book } from "@/types/Book"
+import { fetchBooks } from "@/services/books"
+import { fetchSingleBook } from "@/services/singleBook"
 
-export default function BookPage({ params }: { params: { bookId: string } }) {
+export default async function BookPage({
+    params,
+}: {
+    params: { bookId: string }
+}) {
+    const data: Book = await fetchSingleBook(params.bookId)
+    const recommendations: Book[] = await fetchBooks()
+
+    const date = new Date()
+    date.setTime(Date.parse(data.releaseDate))
+    const formattedDate = date.toDateString().slice(4)
+
     return (
         <>
             <div className={"w-4/5 m-auto flex flex-col "}>
@@ -21,25 +35,50 @@ export default function BookPage({ params }: { params: { bookId: string } }) {
                     <div className="flex flex-col h-fit gap-8 bg-white w-5/6">
                         <div className={"flex gap-8"}>
                             <CustomImage
-                                src={BookPoster.src}
+                                src={data.photos[0].url}
                                 alt="poster"
                                 width={300}
                                 className="shadow-[0_10px_40px_0_rgba(0,0,0,0.20)]"
                             />
                             <div className="flex-col flex gap-6 justify-center">
-                                <h1 className="text-6xl py-4 font-bold capitalize">
-                                    Garis Waktu
+                                <h1 className="text-6xl py-6 font-bold capitalize">
+                                    {data.title}
                                 </h1>
                                 <div className="flex justify-between">
-                                    <span className="capitalize opacity-80">
-                                        By Fiera Bisary
+                                    <span className="capitalize opacity-80 flex flex-wrap gap-x-2">
+                                        by{" "}
+                                        {data.authors.map((a, index) =>
+                                            index ===
+                                            data.authors.length - 1 ? (
+                                                <span>
+                                                    {a.firstName +
+                                                        " " +
+                                                        a.lastName}
+                                                </span>
+                                            ) : (
+                                                <span>
+                                                    {a.firstName +
+                                                        " " +
+                                                        a.lastName +
+                                                        ","}
+                                                </span>
+                                            )
+                                        )}
                                     </span>
                                     <span className="opacity-80">
-                                        1 July 2016
+                                        {formattedDate}
                                     </span>
                                 </div>
-                                <Stars />
-                                <Votes votes={1988288} className="opacity-80" />
+                                <div className={"flex gap-8 items-center"}>
+                                    <Stars />
+                                    <Votes
+                                        votes={data.reviews?.length}
+                                        className="opacity-80"
+                                    />
+                                </div>
+                                <span className={"opacity-70 text-xl"}>
+                                    Price: {data.price}$
+                                </span>
                                 <div className="flex gap-6">
                                     <Link
                                         href={`/1`}
@@ -53,31 +92,19 @@ export default function BookPage({ params }: { params: { bookId: string } }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="px-8 mx-auto">
+                        <div className="px-8">
                             <h3 className="text-2xl py-3 font-medium">
                                 Description
                             </h3>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Ab aliquid architecto
-                                consequuntur culpa distinctio dolorum, eligendi
-                                est et eveniet expedita in iure, laborum
-                                molestiae molestias nemo obcaecati pariatur quia
-                                quidem quisquam repudiandae sed sit vel vero
-                                voluptas voluptatibus? Aspernatur dolorem eaque
-                                illo laudantium modi, molestiae quam qui quis
-                                sint ullam. Lorem ipsum dolor sit amet,
-                                consectetur adipisicing elit. Adipisci animi
-                                architecto autem consequatur, deserunt
-                                dignissimos eaque exercitationem facilis illo
-                                inventore ipsa molestias nesciunt quasi,
-                                quibusdam, quidem quos sint tempore voluptas.
-                            </p>
+                            <p>{data.description}</p>
                         </div>
                         <div className="flex flex-wrap gap-8 px-8">
-                            <Category text="Biography" />
-                            <Category text="Thriller" />
-                            <Category text="Science" />
+                            {data.tags.map((t) => (
+                                <Category
+                                    text={t.name}
+                                    key={`category-${t.id}`}
+                                />
+                            ))}
                         </div>
                         <div className="px-8 flex flex-col ">
                             <h2 className="text-2xl py-4 font-medium">
@@ -87,8 +114,8 @@ export default function BookPage({ params }: { params: { bookId: string } }) {
                                 <AddInfo type="Publisher" value="mediakita" />
                                 <AddInfo type="weight" value="410g" />
                                 <AddInfo type="language" value="Indonesian" />
-                                <AddInfo type="Binding" value="Solid" />
-                                <AddInfo type="Pages" value="210" />
+                                <AddInfo type="Binding" value="Hard" />
+                                <AddInfo type="Pages" value={data.pages} />
                                 <AddInfo type="Age restrictions" value="16+" />
                             </div>
                         </div>
@@ -98,48 +125,21 @@ export default function BookPage({ params }: { params: { bookId: string } }) {
                             </button>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6 w-3/6">
                         <h1 className="text-white text-3xl">Recommendations</h1>
-                        <ShopItem
-                            imgWidth={160}
-                            className="bg-white w-full p-4"
-                            id={1}
-                            src={""}
-                            title="all the light we cannot see"
-                            descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                            author="anthony doerr"
-                            votes={1988288}
-                        />
-                        <ShopItem
-                            imgWidth={160}
-                            className="bg-white w-full p-4"
-                            id={1}
-                            src={""}
-                            title="all the light we cannot see"
-                            descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                            author="anthony doerr"
-                            votes={1988288}
-                        />
-                        <ShopItem
-                            imgWidth={160}
-                            className="bg-white w-full p-4"
-                            id={1}
-                            src={""}
-                            title="all the light we cannot see"
-                            descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                            author="anthony doerr"
-                            votes={1988288}
-                        />
-                        <ShopItem
-                            imgWidth={160}
-                            className="bg-white w-full p-4"
-                            id={1}
-                            src={""}
-                            title="all the light we cannot see"
-                            descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                            author="anthony doerr"
-                            votes={1988288}
-                        />
+                        {recommendations.slice(0, 4).map((item, idx) => (
+                            <ShopItem
+                                imgWidth={160}
+                                descr={item.description}
+                                votes={item.reviews?.length}
+                                title={item.title}
+                                id={item.id}
+                                src={item.photos[0].url}
+                                authors={item.authors}
+                                key={`cart-item-${idx}`}
+                                className="bg-white w-full p-4"
+                            />
+                        ))}
                     </div>
                 </div>
             </div>

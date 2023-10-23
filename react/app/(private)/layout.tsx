@@ -16,10 +16,12 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>
+            <body className="flex flex-col min-h-full">
                 <Header />
                 <Providers>
-                    <main className={"bg-[#F5F6F8] py-20"}>{children}</main>
+                    <main className="bg-[#F5F6F8] flex-1 py-20">
+                        {children}
+                    </main>
                 </Providers>
                 <Footer />
             </body>

@@ -10,65 +10,33 @@ import SubSection from "@/components/main/SubSection"
 import StartWindow from "@/components/main/StartWindow"
 import SliderComponent from "@/components/slider/SliderComponent"
 import Navbar from "@/components/nav/Navbar"
+import { Book } from "@/types/Book"
+import { fetchBooks } from "@/services/books"
 
-export default function Home() {
+export default async function Home() {
+    const books: Book[] = await fetchBooks()
+
     return (
         <>
             <StartWindow />
             <section className="bg-[#F5F6F8] flex relative gap-16 py-20">
-                <Navbar />
+                <Navbar isOpen={true} />
                 <div className={"flex flex-col gap-20 w-[85%]"}>
                     <Section>
                         <SubSection title={"Recommended"}>
                             <div className={"flex flex-wrap gap-20 py-16"}>
-                                <ShopItem
-                                    id={1}
-                                    src={""}
-                                    title="all the light we cannot see"
-                                    descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                                    author="anthony doerr"
-                                    votes={1988288}
-                                />
-                                <ShopItem
-                                    id={1}
-                                    src={""}
-                                    title="all the light we cannot see"
-                                    descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                                    author="anthony doerr"
-                                    votes={1988288}
-                                />
-                                <ShopItem
-                                    id={1}
-                                    src={""}
-                                    title="all the light we cannot see"
-                                    descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                                    author="anthony doerr"
-                                    votes={1988288}
-                                />
-                                <ShopItem
-                                    id={1}
-                                    src={""}
-                                    title="all the light we cannot see"
-                                    descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                                    author="anthony doerr"
-                                    votes={1988288}
-                                />
-                                <ShopItem
-                                    id={1}
-                                    src={""}
-                                    title="all the light we cannot see"
-                                    descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                                    author="anthony doerr"
-                                    votes={1988288}
-                                />
-                                <ShopItem
-                                    id={1}
-                                    src={""}
-                                    title="all the light we cannot see"
-                                    descr="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus morbi eleifend enim, tristique"
-                                    author="anthony doerr"
-                                    votes={1988288}
-                                />
+                                {books.map((item, idx) => (
+                                    <ShopItem
+                                        descr={item.description}
+                                        votes={item.reviews?.length}
+                                        title={item.title}
+                                        id={item.id}
+                                        src={item.photos[0].url}
+                                        authors={item.authors}
+                                        key={`home-item-${idx}`}
+                                        className="w-2/5 bg-white p-8 rounded-xl grow"
+                                    />
+                                ))}
                             </div>
                         </SubSection>
                         <SubSection title={"New Arrivals"}>

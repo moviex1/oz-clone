@@ -29,6 +29,7 @@ const CustomImage = ({
                 height={328}
                 priority={priority}
                 className={className}
+                // sizes="188px"
             />
         </div>
     )

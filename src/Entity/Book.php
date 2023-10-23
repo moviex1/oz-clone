@@ -181,10 +181,6 @@ class Book
         return $this;
     }
 
-<<<<<<<<< Temporary merge branch 1
-
-=========
->>>>>>>>> Temporary merge branch 2
     public function getPrice(): ?string
     {
         return $this->price;

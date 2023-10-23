@@ -7,8 +7,8 @@ import Navbar from "@/components/common/Navbar"
 
 const Header = () => {
     return (
-        <header className="flex justify-between h-[110px] items-center overflow-hidden w-4/5 m-auto py-6">
-            <div className="absolute top-0 right-0 h-full -z-10">
+        <header className="flex flex-shrink-0 justify-between h-[110px] items-center overflow-hidden w-4/5 m-auto py-6">
+            <div className="absolute top-0 max-xl:w-1/2 right-0 h-full -z-10">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="863"

@@ -17,9 +17,9 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
-            <body className={rubik.className}>
-                <main className="pb-12 w-full bg-[linear-gradient(to_bottom,#FF971D_60vh,#F5F6F899_60vh)]">
+        <html className={rubik.className} lang="en">
+            <body className="flex flex-col min-h-full">
+                <main className="pb-12 w-full bg-[linear-gradient(to_bottom,#FF971D_60vh,#F5F6F899_60vh)] flex-1">
                     <Providers>{children}</Providers>
                 </main>
             </body>

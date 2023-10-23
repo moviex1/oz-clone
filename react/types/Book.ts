@@ -17,6 +17,7 @@ export interface Book {
             pfpUrl: string
         },
     ]
+    reviews: string[] | null
     releaseDate: string
     pages: number
     description: string
