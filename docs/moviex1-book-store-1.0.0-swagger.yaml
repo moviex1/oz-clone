@@ -1,11 +1,8 @@
 swagger: '2.0'
 info:
-  description: This is a simple API
+  description: Book store API
   version: 1.0.0
-  title: Simple Inventory API
-  contact:
-    email: you@your-company.com
-
+  title: Book store API
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -17,9 +14,13 @@ tags:
     description: Book endpoints
   - name: Tag
     description: Tag endpoints
+  - name: Review
+    description: Review endpoints
   - name: Auth
     description: Auth endpoints
+
 paths:
+  #--------Book--------
   /book:
     get:
       tags:
@@ -139,6 +140,8 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/ErrorResponse'
+
+  #--------Author--------
   /author:
     get:
       tags:
@@ -176,6 +179,8 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/ErrorResponse'
+
+  #--------Tag--------
   /tag:
     get:
       tags:
@@ -188,6 +193,45 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Tag'
+
+  #--------Review--------
+  /review:
+    post:
+      tags:
+        - Review
+      responses:
+        200:
+          description: OK
+          schema:
+            type: string
+            example: OK
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+  #--------Auth--------
+  /register:
+    post:
+      tags:
+        - Auth
+      summary: Register user by provided credentials
+      parameters:
+        - in: body
+          name: Register body
+          required: true
+          schema:
+            $ref: '#/definitions/Credentials'
+      responses:
+        200:
+          description: OK
+          schema:
+            type: string
+            example: OK
+        400:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ValidationError'
   /login:
     post:
       tags:
@@ -219,14 +263,65 @@ paths:
             $ref: '#/definitions/ErrorResponse'
 
 
+#--------Definitions--------
 definitions:
+  ValidationError:
+    type: object
+    properties:
+      type:
+        type: string
+        example: 'https://symfony.com/errors/validation'
+      title:
+        type: string
+        example: 'Validation Failed'
+      detail:
+        type: string
+        example: "email: You didn't fill email field\n password: You didn't fill password field"
+      violations:
+        type: array
+        items:
+          $ref: '#/definitions/Violation'
+  Violation:
+    type: object
+    properties:
+      propertyPath:
+        type: string
+        example: 'email'
+      title:
+        type: string
+        example: "You didn't fill email field"
+      template:
+        type: string
+        example: "You didn't fill email field"
+      parameters:
+        type: object
+        properties:
+          '{{value}}':
+            type: string
+            example: "null"
+      type:
+        type: string
+        example: "urn:uuid:c1051bb4-d103-4f74-8988-acbcafc7fdc3"
   ErrorResponse:
     type: object
     properties:
       message:
         type: string
         description: description of the error
-        example: Cannot find book
+        example: Some error
+  Credentials:
+    type: object
+    properties:
+      email:
+        type: string
+        description: Users email
+        example: example@mail.com
+      password:
+        type: string
+        description: Users password
+        example: password1234
+
+  #--------Entities--------
   Author:
     type: object
     properties:
@@ -315,17 +410,6 @@ definitions:
         type: string
         description: average rating from reviews
         example: "4.5"
-  Credentials:
-    type: object
-    properties:
-      email:
-        type: string
-        description: Users email
-        example: example@mail.com
-      password:
-        type: string
-        description: Users password
-        example: password1234
 
 host: localhost:8081
 basePath: /api/v1
