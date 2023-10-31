@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Dto\ReviewBodyDto;
+use App\Entity\Book;
 use App\Entity\Review;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +22,24 @@ class ReviewRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Review::class);
+    }
+
+    public function createReview(
+        User $user,
+        Book $book,
+        ReviewBodyDto $reviewDto
+    ) : void
+    {
+        $review = new Review();
+        $review->setUser($user)
+            ->setBook($book)
+            ->setComment($reviewDto->comment)
+            ->setHeader($reviewDto->header)
+            ->setRate($reviewDto->rate);
+
+        $em = $this->getEntityManager();
+        $em->persist($review);
+        $em->flush();
     }
 
 //    /**

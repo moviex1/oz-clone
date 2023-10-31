@@ -18,7 +18,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\NotBlank(message: 'Вы не ввели поле email')]
     #[Groups(['default_user_info'])]
     private ?string $email = null;
 
@@ -27,6 +26,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column]
+    #[Groups(['default_user_info'])]
     #[Assert\NotBlank(message: 'Вы не ввели поле пароль')]
     private ?string $password = null;
 
