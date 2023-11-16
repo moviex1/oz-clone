@@ -3,6 +3,8 @@
 namespace App\Factory;
 
 use App\Entity\Book;
+use App\Enum\CoverTypeEnum;
+use App\Enum\LanguagesEnum;
 use App\Repository\BookRepository;
 use App\Repository\TagRepository;
 use Zenstruck\Foundry\ModelFactory;
@@ -47,12 +49,17 @@ final class BookFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $randLangInd = rand(0,count(LanguagesEnum::cases()) - 1);
+        $randCoverInd = rand(0, count(CoverTypeEnum::cases()) - 1);
         return [
             'pages' => rand(120, 3000),
             'description' => self::faker()->text(),
-            'release_date' => self::faker()->dateTimeBetween('-50 years')->format('Y-m-d'),
+            'release_date' => self::faker()->dateTimeBetween('-50 years'),
             'title' => self::faker()->sentence(rand(1,3)),
-            'price' => self::faker()->randomFloat(2, 1, 80)
+            'price' => self::faker()->randomFloat(2, 1, 80),
+            'weight' => rand(150, 1000),
+            'language' => LanguagesEnum::cases()[$randLangInd]->value,
+            'cover' => CoverTypeEnum::cases()[$randCoverInd]->value
         ];
     }
 

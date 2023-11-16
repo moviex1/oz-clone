@@ -38,17 +38,18 @@ class AppFixtures extends Fixture
                 return [
                     'tags' => TagFactory::randomRange(1, 3),
                     'authors' => AuthorFactory::randomRange(1, 2),
-                    'photos' => PhotoFactory::new()->many(2,5)
+                    'photos' => PhotoFactory::new()->many(2, 5)->create()
                 ];
             });
+
 
         ReviewFactory::new()
             ->many(40)
             ->create(function () {
-               return [
-                   'user' => UserFactory::random(),
-                   'book' => BookFactory::random()
-               ];
+                return [
+                    'user' => UserFactory::random(),
+                    'book' => BookFactory::random()
+                ];
             });
     }
 }

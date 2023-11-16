@@ -48,7 +48,7 @@ final class AuthorFactory extends ModelFactory
     {
         return [
             'pfp_url' => self::faker()->imageUrl(),
-            'birth_date' => self::faker()->dateTimeBetween('-80 years', '-30 years')->format('Y-m-d'),
+            'birth_date' => self::faker()->dateTimeBetween('-80 years', '-30 years'),
             'first_name' => self::faker()->firstName(),
             'last_name' => self::faker()->lastName(),
         ];
