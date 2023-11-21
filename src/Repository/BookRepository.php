@@ -36,7 +36,6 @@ class BookRepository extends ServiceEntityRepository
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->orderBy('b.' . $sortBy, $sortOrder)
-            ->groupBy('b.id')
             ->getQuery()
             ->getResult();
 
@@ -79,20 +78,21 @@ class BookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findBooksByTitle(string $title)
+    public function findBooksByTitle(string $title): array
     {
         $booksResults = $this->booksWithAvgRateQueryBuilder()
             ->andWhere('b.title LIKE :title')
             ->setParameter('title', "$title%")
-            ->groupBy('b.id')
             ->getQuery()
             ->getResult();
+
         $result = [];
         foreach ($booksResults as $bookResult) {
             $book = $bookResult[0];
             $avgRate = $bookResult['avg_rate'];
             $result[] = new BookResponse($book, $avgRate);
         }
+
         return $result;
     }
 
@@ -110,7 +110,8 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->addSelect('b', 'avg(r.rate) as avg_rate')
-            ->leftJoin('b' . '.reviews', 'r');
+            ->leftJoin('b' . '.reviews', 'r')
+            ->groupBy('b.id');
     }
 
 //    /**
