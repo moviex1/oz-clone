@@ -58,13 +58,7 @@ class BookController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $books = $bookRepository->findBooksByTitle($title);
-        $result = [];
-        foreach ($books as $book) {
-            $result[] = new BookResponse($book);
-        }
-
-        return $result;
+        return $bookRepository->findBooksByTitle($title);
     }
 
     #[Route('/tag/{tagId}')]

@@ -81,11 +81,19 @@ class BookRepository extends ServiceEntityRepository
 
     public function findBooksByTitle(string $title)
     {
-        return $this->booksWithAvgRateQueryBuilder()
+        $booksResults = $this->booksWithAvgRateQueryBuilder()
             ->andWhere('b.title LIKE :title')
             ->setParameter('title', "$title%")
+            ->groupBy('b.id')
             ->getQuery()
             ->getResult();
+        $result = [];
+        foreach ($booksResults as $bookResult) {
+            $book = $bookResult[0];
+            $avgRate = $bookResult['avg_rate'];
+            $result[] = new BookResponse($book, $avgRate);
+        }
+        return $result;
     }
 
     public function findBooksByAuthorId(int $authorId)
